@@ -1,0 +1,718 @@
+importance of null values
+missing/inapproriate/unknown
+
+create table students10
+(
+rollno varchar2(20),
+name varchar2(20),
+phno integer
+);
+
+desc students10
+
+insert into students10 values('24P11CS171','Yaswanth',null);
+
+insert into students10 values('24P11CS164',null,null);
+
+select * from students10;
+
+update students10
+set phno=8115645644
+where rollno='24P11CS171';
+
+update students10
+set sname='Phani'
+where rollno='24P11CS164';
+
+select * from students10;
+
+constraints
+1) not null
+create table student
+(
+sid integer not null,
+name varchar2(20) not null,
+marks integer
+);
+
+desc student
+insert into student values(null,'ravi',50);
+insert into student values(501,null,50);
+insert into student values(501,'ravi',null);
+insert into student values(501,'ravi',50);
+select * from student;
+
+delete from student
+where sid=501;
+
+
+insert into student values(501,'ravi',null);
+insert into student values(502,'padma',60);
+insert into student values(503,'suma',null);
+insert into student values(504,'uday',80);
+
+select * from student;
+4 rows
+
+syntax of is null/is not null operator
+select colname from tablename
+where colname is null/is not null
+
+Find the name of students whose marks are empty/null.
+select name from student where marks is null;
+name
+ravi
+suma
+Find the name of students whose marks are not empty/null.
+select name from student where marks is not null;
+name
+padma
+uday
+
+2) unique
+Create table student20
+(
+Rollno integer,
+Name varchar2(20),
+Marks integer,
+Unique(rollno));
+
+desc student20
+
+insert into student20 values(501,'padma',50);
+insert into student20 values(501,'padma',50);
+insert into student20 values(null,'padma',50);
+insert into student20(Marks,Rollno,Name) values(60,502,'ooha');
+insert into student20 values(:Rollno,:Name,:Marks);
+
+3) check
+Create table student30
+(
+Rno integer,
+Name varchar2(20),
+Marks integer,
+Check(marks<101));
+
+insert into student30 values(501,'ravi',null);
+insert into student30 values(502,'suma',60);
+insert into student30 values(503,'geetha',120);
+insert into student30 values(504,'ramu',0);
+insert into student30 values(502,'suma',60);
+select * from student30;
+
+4) primary key
+Create table student40
+(
+Rno integer,
+Name varchar2(20),
+Marks integer,
+Primary key(rno));
+
+desc student40
+
+insert into student40 values(501,'hema',50);
+insert into student40 values(501,'hema',50);
+insert into student40 values(null,'hema',50);
+
+Create table student80
+(
+Rno integer,
+Name varchar2(20),
+Marks integer,
+Primary key(Rno,Name));
+
+desc student80
+
+insert into student80 values(501,'hema',50);
+insert into student80 values(501,'hema',50);
+insert into student80 values(501,'geetha',50);
+insert into student80 values(502,'hema',50);
+insert into student80 values(null,null,50);
+
+
+
+
+
+Create table student40
+(
+Rno integer,
+Name varchar2(20),
+Marks integer,
+Primary key(rno));
+
+desc student40
+
+insert into student40 values(501,'hema',50);
+delete from student40
+where Rno=501;
+
+5) foreign key
+Create table studentad
+(
+Rno integer,
+Fee integer,
+Foreign key(Rno) references student40(Rno));
+desc studentad
+
+insert into studentad values(501,60000);
+insert into studentad values(501,7000);
+insert into studentad values(501,null);
+insert into studentad values(null,null);
+insert into studentad values(502,60000);
+
+delete from studentad
+where Rno=501;
+
+
+6) default
+Create table students90
+(
+Rno integer,
+Name varchar2(20),
+Gender char(1) default ‘F’,
+Marks integer);
+
+desc students90
+insert into students90 values(501,'suma',default,60);
+insert into students90 values(502,'geetha',default,50);
+insert into students90 values(503,'hari','M',70);
+insert into students90 values(504,'uday','M',40);
+
+select * from students90;
+
+
+Sailors(sid:integer,sname:string, rating:integer,age:real)
+Create table sailors
+(
+sid integer primary key,
+sname varchar2(30),
+rating integer,
+age number(3,1)
+);
+
+boats(bid:integer,bname:string,bcolor:string)
+create table boats
+(
+bid integer primary key,
+bname varchar2(20),
+bcolor varchar2(20)
+);
+
+reserves(sid:integer,bid:integer,rdate:date)
+create table reserves
+(
+sid integer,
+bid integer,
+rdate date,
+foreign key(sid) references sailors(sid),
+foreign key(bid) references boats(bid)
+);
+
+select * from tab;
+
+
+insert into reserves values(22,101,'10-OCT-98');
+
+
+
+
+create table st
+(
+rollno integer primary key,
+name varchar2(20)
+);
+
+
+create table st
+(
+rollno integer,
+name varchar2(20), 
+primary key(rollno)
+);
+
+constraint constraint_name primary key(columnname)
+
+create table st
+(
+rollno integer,
+name varchar2(20),
+constraint st_pk primary key(rollno)
+);
+
+desc st
+
+alter table st
+drop constraint st_pk;
+
+desc st
+
+create table st1
+(
+rollno integer,
+name varchar2(20)
+);
+
+alter table st1
+add constraint st_pk1 primary key(rollno);
+
+desc st1
+
+alter table st1
+drop constraint st_pk1;
+
+desc st1
+
+create table st2
+(
+rollno integer,
+name varchar2(20)
+);
+
+alter table st2
+add constraint st_un unique(rollno);
+insert into st2 values(501,'leela');
+insert into st2 values(501,'leela');
+
+alter table st2
+drop constraint st_un;
+insert into st2 values(501,'leela');
+
+alter table st2
+modify rollno integer not null;
+
+desc st2
+
+alter table tablename
+modify columnname default 'value'
+
+alter table st2
+modify name varchar2(20) default 'ravi';
+
+desc st2
+
+alter table st2
+add marks integer;
+
+syntax
+alter table tablename
+add constraint constraintname check(condition)
+alter table tablename
+drop constraint constraintname
+
+alter table st2
+add constraint c_ch check(marks<101);
+
+alter table st2
+drop constraint c_ch;
+
+drop table st2;
+
+
+create table st2
+(
+rollno integer primary key,
+name varchar2(20)
+);
+
+create table st3
+(
+rollno integer,
+fee integer
+);
+
+syntax
+alter table tablename
+add constraint constraintname foreign key(columnname) references parenttablename(columnname)
+
+alter table tablename
+drop constraint constraintname
+
+alter table st3
+add constraint fk_st1 foreign key(rollno) references st2(rollno);
+
+alter table st3
+drop constraint fk_st1;
+
+
+Suppliers(sid: integer, sname: string, address: string)
+Parts(pid: integer, pname: string, color: string)
+Catalog(sid: integer, pid: integer, cost: real)
+Identify constraints and create tables for the above schema
+
+
+
+
+
+
+EMPLOYEE (EMPID, FName, LName,Address, Sex, Salary,DeptNo)
+DEPARTMENT (DeptNo, DName, HOD_EMPID)
+PROJECT (ProjNo, PName, DeptNo)
+WORKS_ON (EMPID, ProjNo, Hours)
+Identify constraints and create tables for the above schema
+
+
+
+queries
+
+find the name,age of all sailors
+select sname,age from sailors;
+
+select sailors.sname,sailors.age from sailors;
+
+select s.sname,s.age from sailors s;
+
+find all sailors whose rating is greater than 7
+
+select * from sailors s
+where s.rating>7;
+
+syntax
+select colname from tablename
+where condition
+
+select * from sailors s
+where s.rating<7;
+
+select * from sailors s
+where s.rating!=7;
+
+select * from sailors s
+where s.rating<>7;
+
+select * from sailors s
+where s.rating=7;
+
+
+find all sailors whose rating is greater than 7 and age is less than 20
+select * from sailors s
+where s.rating>7 and s.age<20;
+
+like operator syntax
+select colname from tablename
+where colname like pattern
+
+_ indicates one character
+% indicates one or more characters
+find the age of sailors whose name begins and ends with b and has atleast three characters
+select s.age from sailors s
+where s.sname like 'B_%b';
+
+exactly three characters
+select s.age from sailors s
+where s.sname like 'B_b';
+
+
+ROLLNO NAME                           CITY
+---------- ------------------------------ --------------------
+     501 ravi				bangalore  
+     502 suma                           mumbai
+       503 uma                            chennai
+       504 leela                          raipur
+       505 mani                           jaipur
+
+Find all the details of students where city that have "ai" in any position
+SQL> select * from studs where city like '%ai%';
+
+    ROLLNO NAME                           CITY
+---------- ------------------------------ --------------------
+       502 suma                           mumbai
+       503 uma                            chennai
+       504 leela                          raipur
+       505 mani                           jaipur
+select * from studs where city not like '%ai%';
+ROLLNO NAME                           CITY
+---------- ------------------------------ --------------------
+     501 ravi				bangalore  
+
+Find all the details of students where city that ends with r
+
+SQL> select * from studs where city like '%r';
+    ROLLNO NAME                         CITY
+---------- ------------------- --------------------
+       504 leela                          raipur
+       505 mani                           jaipur
+Find all the details of students where city that starts with m
+
+SQL> select * from studs where city like 'm%';
+   ROLLNO NAME                           CITY
+--------- ------------------------------ --------------------
+      502 suma                           mumbai
+Find all the details of students where city that have "e" in third position
+SQL> select * from studs where city like '__e%';
+    ROLLNO NAME                           CITY
+---------- ------------------------------ --------------------
+       503 uma                            chennai
+Find all the details of students where city that start with c and ends with i
+SQL> select * from studs where city like 'c%i';
+
+    ROLLNO NAME                           CITY
+---------- ------------------------------ --------------------
+       503 uma                            chennai
+
+arithmetic operators
+select * from dual;
+
+select 3+2 from dual;
+select 3+2 as addition from dual;
+
+select 3+2 addition from dual;
+select 3-2 as subtract from dual;
+
+select 3*2 as multiply from dual;
+
+select 3/2 as division from dual;
+
+select 3%2 as division from dual;
+
+select mod(3,2) as modulus from dual;
+
+student
+rno	name	int	ext
+501	ravi	30	40
+502	suma	32	45	
+503	rani	35	50
+504	usha	40	55
+505     usha	50	60
+
+select distinct name from student;
+
+select name from student;
+
+
+select rno,name,int,ext,int+ext as total from student;
+
+logical operators
+
+select rno from student where name='rani' and int=35;
+
+select rno from student where name='rani' and int=40;
+
+select rno from student where name='rani' or int=35;
+
+select rno from student where name='rani' or int=40;
+
+select * from student where not int=40;
+
+comparison operators
+select rno,name from student where int<35;
+
+select rno,name from student where ext>40;
+
+select rno,name from student where int<>32;
+
+select * from student where int between 30 and 35;
+Find sailors who have a rating of 8 or more and are at least 25 years old
+SELECT sname
+FROM Sailors
+WHERE rating >= 8 AND age >= 25;
+
+Find boat names that are either red or green
+    SELECT bname
+    FROM Boats
+    WHERE color = 'red' OR color = 'green';
+
+find sailor names whose rating is not 7
+select sname from sailors where not rating=7;
+
+find Sailor names with ratings between 3 and 7
+SELECT sname
+FROM Sailors
+WHERE rating BETWEEN 3 AND 7;
+
+
+
+On Delete Cascade:
+create table t1
+ (
+ t1_id integer,
+ t1_desc varchar2(30),
+ primary key(t1_id));
+ 
+create table t2
+ (
+ t1_t2_id integer,
+ t2_id integer,
+ t2_desc varchar2(30),
+ primary key(t2_id),
+ foreign key(t1_t2_id) references t1(t1_id) on delete cascade
+ );
+
+create table t3
+ (
+ t2_t3_id integer,
+ t3_id integer,
+ t3_desc varchar2(30),
+ primary key(t3_id),
+ foreign key(t2_t3_id) references t2(t2_id) on delete cascade
+ );
+
+insert into t1 values(1,'t1one');
+insert into t2 values(1,1,'t2one');
+insert into t3 values(1,1,'t3one');
+
+delete from t1 cascade;
+
+select * from t1;
+select * from t2;
+select * from t3;
+
+insert into t1 values(1,'t1one');
+insert into t2 values(1,1,'t2one');
+insert into t3 values(1,1,'t3one');
+
+delete from t2 cascade;
+
+select * from t1;
+T1_ID T1_DESC
+---------- ------------------------------
+1 t1 one
+select * from t2;
+no rows
+select * from t3;
+no rows
+
+
+drop table t3;
+
+drop table t2;
+
+
+
+On Delete SetNull:
+create table t1
+ (
+ t1_id integer,
+ t1_desc varchar2(30),
+ primary key(t1_id)
+ );
+
+create table t2
+ (
+ t2_id integer,
+ t1_t2_id integer,
+ t2_desc varchar2(30),
+ primary key(t2_id),
+ foreign key(t1_t2_id) references t1(t1_id) on delete set NULL
+ );
+
+ create table t3
+ (
+ t3_id integer,
+ t2_t3_id integer,
+ t3_desc varchar2(30),
+ primary key(t3_id),
+ foreign key(t2_t3_id) references t2(t2_id) on delete set NULL
+ );
+
+insert into t1 values(1,'t1one');
+insert into t2 values(1,1,'t2one');
+insert into t3 values(1,1,'t3one');
+
+delete from t1 where t1_id = 1;
+select * from t1;
+no rows
+select * from t2;
+
+T2_ID 	T1_T2_ID 	T2_DESC
+---------- ---------- ------------------------------
+1 			t1 one
+ select * from t3;
+T3_ID T2_T3_ID T3_DESC
+---------- ---------- ------------------------------
+1	 1	t3 one
+
+delete from t2 where t2_id=1;
+select * from t2;
+no rows
+select * from t3;
+ select * from t3;
+T3_ID 	T2_T3_ID 	T3_DESC
+---------- ---------- ------------------------------
+1 			 t3 one
+
+
+string functions
+select concat('oracle','database') from dual;
+select concat ('oracle','database') as stringconcat from dual;
+select concat('oracle',concat('RDBMS','Software')) from dual;
+
+select 'oracle' || 'database' from dual;
+
+select length ('oracle') from dual;
+
+select upper ('oracle') from dual;
+
+select lower ('ORACLE') from dual;
+
+select initcap('oracle database') from dual;
+
+select ascii('A') from dual;
+select chr(65) from dual;
+select lpad ('oracle',8,'*') from dual;
+select rpad ('oracle',8,'*') from dual;
+
+select ltrim ('aabbcc','a') from dual;
+
+select rtrim ('aabbcc','c') as righttrim from dual;
+
+select substr('abcdefg',5,2) from dual;
+
+select substr('abcdefg',-5,3) from dual;
+
+select reverse('oracle') from dual;
+
+select instr ('abcdefgh','d') from dual;
+
+select instr('abab','b',2) from dual;
+
+select replace ('jack and joe','j','b') from dual;
+
+select * from st;
+rollno	name	branch
+501	ravi	computer science
+502	suma	artificial intelligence
+503	uday	data science
+504	geetha	cyber security
+505	padma	internet of things
+
+select upper(name),initcap(branch) from st;
+
+NUMERIC FUNCTIONS:
+select abs(19) from dual;
+select abs(-15) from dual;
+select sign(26) from dual;
+select sign(-26) from dual;
+select power(5,3) from dual;
+select sqrt(625) from dual;
+select ceil(3.3) from dual;
+select ceil(-3.3) from dual;
+select floor(6.6) from dual;
+select floor(-6.6) from dual;
+select exp(4) from dual;
+select round(77.7777,2) from dual;
+select trunc(77.777,2) from dual;
+select mod(200,3) from dual;
+
+DATE FUNCTIONS:
+select sysdate from dual;
+select extract (day from sysdate) from dual;
+select extract (month from sysdate) from dual;
+select extract (year from sysdate) from dual;
+select sysdate+1 from dual;
+select sysdate-1 from dual;
+select add_months (sysdate,1) from dual;
+select add_months (sysdate,2) from dual;
+select last_day (sysdate) from dual;
+select last_day('05-Feb-25') from dual;
+select next_day ('25-Aug-25','Monday') from dual;
+select next_day ('31-Jul-25','Thursday') from dual;
+select next_day(sysdate,'Thursday') from dual;
+select to_char(sysdate,'YYYY/MM/DD hh:mm:ss') from dual;
+select to_date('15-11-2018','DD-MM-YYYY') from dual;
+select months_between(to_date('20-05-2024','dd-mm-yyyy'),to_date('05-02-2025','dd-mm-yyyy')) from dual;
+
+
+
+
+
+
